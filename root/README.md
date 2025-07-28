@@ -12,7 +12,7 @@ make frontend-test
 
 > **Tip:** `make up` uses Docker Compose to start backend, worker (Celery), Redis, Postgres, and MinIO. No need to start Redis or the Celery worker manually for normal development.
 
-# Project Title
+# Title: Datavein {...}
 
 
 ## Overview
@@ -130,7 +130,6 @@ All Python dependencies are installed automatically by `make setup`, which insta
    ```
 
 
-
 4. **For local Celery/worker tests:**
    - No manual steps are needed! Just use `make up` to start all services (backend, worker, Redis, Postgres, MinIO) via Docker Compose. The Celery worker and Redis are started automatically and are available for both development and testing.
    - To run backend tests:
@@ -142,20 +141,10 @@ All Python dependencies are installed automatically by `make setup`, which insta
      make frontend-test
      ```
    > **Note:** If you encounter issues with worker tests, ensure `make up` is running and all containers are healthy. Use `docker-compose -f infra/docker-compose.yml ps` to check container status.
-## FAQ / Common Issues
 
-**Q: Do I need to start Redis or the Celery worker manually?**
-A: No, if you use `make up` (Docker Compose), both are started for you. Only start them manually if running tests outside Docker Compose.
-
-**Q: My worker tests hang or fail with a timeout.**
-A: Make sure the Celery worker is running and connected to the same Redis instance as your tests. If using Docker Compose, this is automatic.
-
-
-**Q: What Node.js version should I use?**
-A: Node.js 18+ is recommended for best compatibility with the frontend. Frontend tests use Vitest by default.
-
-**Q: How do I stop all services?**
-A: Run `docker-compose -f infra/docker-compose.yml down`.
+Import for local dev:
+-  Make sure the Celery worker is running and connected to the same Redis instance as your tests. If using Docker Compose, this is automatic.
+-  Stop all services by `docker-compose -f infra/docker-compose.yml down`.
 
 
 This ensures all dependencies are installed with the correct Python version and your tests will work, including Celery/worker tests.
@@ -167,4 +156,3 @@ This ensures all dependencies are installed with the correct Python version and 
 - `make frontend-test` works for the frontend.
 
 ## License
-This project is licensed under the MIT License. See the LICENSE file for details.
