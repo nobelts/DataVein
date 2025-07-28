@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "minio": {
+    "buckets": [
+      {
+        "name": "my-bucket",
+        "policy": "public-read"
+      }
+    ],
+    "accessKey": "minioadmin",
+    "secretKey": "minioadmin",
+    "region": "us-east-1"
+  }
+}

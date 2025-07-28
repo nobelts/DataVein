@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_URL=postgresql://user:password@postgres/dbname
+      - JWT_SECRET=your_jwt_secret
+    depends_on:
+      - postgres
+
+  worker:
+    build:
+      context: ../worker
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:alpine
+
+  postgres:
+    image: postgres:13
+    ports:
+      - "5432:5432"  # Uncomment for local dev access to Postgres (psql, DBeaver, etc.)
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=dbname
+    volumes:
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  minio:
+    image: minio/minio
+    ports:
+      - "9000:9000"
+    environment:
+      - MINIO_ACCESS_KEY=minio
+      - MINIO_SECRET_KEY=minio123
+    command: server /data
+
+networks:
+  default:
+    driver: bridge

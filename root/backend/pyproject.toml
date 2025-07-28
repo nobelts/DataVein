@@ -1,0 +1,31 @@
+# DEPRECATED: This file is no longer used. All dependencies are managed in requirements.txt files.
+#
+# [tool.poetry]
+# name = "backend"
+# version = "0.1.0"
+# description = "FastAPI backend for the application"
+# authors = ["Your Name <your.email@example.com>"]
+# license = "MIT"
+#
+# [build-system]
+# requires = ["poetry-core>=1.0.0"]
+# build-backend = "poetry.core.masonry.api"
+#
+# [dependencies]
+# fastapi = "^0.95.0"
+# uvicorn = "^0.22.0"
+# sqlalchemy = "^2.0.0"
+# asyncpg = "^0.27.0"  # PostgreSQL driver
+# celery = "^5.2.0"
+# redis = "^4.0.0"  # Redis client for Celery
+# minio = "^7.1.0"  # MinIO client for Python
+#
+# [tool.poetry.dev-dependencies]
+# pytest = "^7.0.0"
+# black = "^22.0.0"
+# ruff = "^0.4.0"  # Add the latest version
+# mypy = "^0.910"  # Optional type checking
+#
+# [tool.ruff]
+# line-length = 88
+# exclude = ["tests/*", "migrations/*"]

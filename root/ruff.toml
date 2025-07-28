@@ -1,0 +1,9 @@
+[tool]
+line-length = 88
+
+[ruff]
+exclude = ["tests/*", "frontend/*", "infra/*", "scripts/*"]
+extend-ignore = ["E501", "E203"]
+per-file-ignores = {
+    "__init__.py" = ["F401"],
+}

@@ -1,0 +1,29 @@
+# DEPRECATED: This file is no longer used. All dependencies are managed in requirements.txt files.
+#
+# [tool]
+# name = "backend"
+# version = "0.1.0"
+# description = "FastAPI backend for the application"
+# authors = ["Your Name <youremail@example.com>"]
+# license = "MIT"
+# [REMOVED: This file is no longer used. Use requirements.txt for dependencies.]
+# [build-system]
+# requires = ["poetry-core>=1.0.0"]
+# build-backend = "poetry.core.masonry.api"
+#
+# [dependencies]
+# fastapi = "^0.75.0"
+# uvicorn = "^0.17.0"
+# sqlalchemy = "^1.4.27"
+# asyncpg = "^0.24.0"  # PostgreSQL driver
+# pydantic = "^1.9.0"
+#
+# [tool.poetry.dev-dependencies]
+# pytest = "^7.0.0"
+# black = "^21.12b0"
+# ruff = "^0.0.1"  # Linter
+# mypy = "^0.910"  # Type checker
+#
+# [tool.ruff]
+# line-length = 88
+# exclude = ["tests/*"]

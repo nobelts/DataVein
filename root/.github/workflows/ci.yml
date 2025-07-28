@@ -1,0 +1,88 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: mydatabase
+        ports:
+          - 5432:5432
+        volumes:
+          - postgres_data:/var/lib/postgresql/data
+
+      redis:
+        image: redis:latest
+        ports:
+          - 6379:6379
+
+      minio:
+        image: minio/minio
+        env:
+          MINIO_ACCESS_KEY: minio
+          MINIO_SECRET_KEY: minio123
+        ports:
+          - 9000:9000
+        command: server /data
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Install backend dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+
+      - name: Run backend tests
+        run: |
+          cd backend
+          pytest
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm install
+
+      - name: Run frontend tests
+        run: |
+          cd frontend
+          npm test
+
+      - name: Build Docker images
+        run: |
+          docker-compose -f infra/docker-compose.yml build
+
+      - name: Start services
+        run: |
+          docker-compose -f infra/docker-compose.yml up -d
+
+      - name: Health check
+        run: |
+          curl --retry 5 --retry-delay 2 --retry-connrefused localhost:8000/health
+
+volumes:
+  postgres_data: {}
