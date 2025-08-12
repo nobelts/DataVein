@@ -1,4 +1,136 @@
-# Quick Start
+# DataVein - Data Processing Platform
+
+A data processing platform that accepts file uploads (CSV/JSON), processes them through pipeline stages, and outputs Parquet files. Built with FastAPI, PostgreSQL, Celery, and React.
+
+## Quick Start
+
+### 1. Environment Setup
+```bash
+# Copy environment template
+cp .env.example .env
+
+# Update .env with your configuration
+# At minimum, change the SECRET_KEY for production
+```
+
+### 2. Start Infrastructure (Docker)
+```bash
+# Start database, Redis, and MinIO
+cd infra
+docker-compose up -d
+```
+
+### 3. Setup Python Environment
+```bash
+# From project root
+cd root
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r backend/requirements.txt
+```
+
+### 4. Initialize Database
+```bash
+# Run database migration
+python scripts/migrate_db.py
+```
+
+### 5. Start Services
+
+**Terminal 1 - Backend API:**
+```bash
+cd root
+source venv/bin/activate
+uvicorn backend.app.main:app --host 0.0.0.0 --port 8000 --reload
+```
+
+**Terminal 2 - Celery Worker:**
+```bash
+cd root
+source venv/bin/activate
+./scripts/start_worker.sh
+```
+
+**Terminal 3 - Frontend (optional):**
+```bash
+cd root/frontend
+npm install
+npm run dev
+```
+
+## API Usage
+
+### 1. Register User
+```bash
+curl -X POST "http://localhost:8000/auth/register" \
+  -H "Content-Type: application/json" \
+  -d '{"email": "user@example.com", "password": "password123"}'
+```
+
+### 2. Login
+```bash
+curl -X POST "http://localhost:8000/auth/login" \
+  -H "Content-Type: application/json" \
+  -d '{"email": "user@example.com", "password": "password123"}'
+```
+
+### 3. Upload File
+```bash
+# Get presigned URL
+curl -X POST "http://localhost:8000/uploads/presigned-url" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"filename": "data.csv", "file_size": 1024}'
+
+# Upload file to the presigned URL (use the response from above)
+# Then complete the upload
+curl -X POST "http://localhost:8000/uploads/1/complete" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+### 4. Start Pipeline
+```bash
+curl -X POST "http://localhost:8000/pipeline/start" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"upload_id": 1, "config": {"synthetic_multiplier": 2}}'
+```
+
+### 5. Check Pipeline Status
+```bash
+curl -X GET "http://localhost:8000/pipeline/1" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+## Project Structure
+
+```
+root/
+├── backend/           # FastAPI backend
+│   ├── app/
+│   │   ├── api/       # API routes
+│   │   ├── pipeline/  # Pipeline processing
+│   │   ├── models.py  # Database models
+│   │   └── main.py    # FastAPI app
+│   └── requirements.txt
+├── frontend/          # React frontend (optional)
+├── scripts/           # Deployment scripts
+│   ├── migrate_db.py  # Database setup
+│   └── start_worker.sh # Celery worker
+└── infra/             # Infrastructure (Docker)
+```
+
+## Pipeline Stages
+
+1. **VALIDATE** - Checks file format and structure
+2. **PROFILE** - Analyzes data types, distributions, quality
+3. **AUGMENT** - Generates synthetic data (stub)
+4. **PARQUETIZE** - Converts to Parquet format (stub)
+5. **FINALIZE** - Cleanup and metadata (stub)
+
+Stages 1-2 are fully implemented. Stages 3-5 are stubs for MVP demonstration.
+
+## Alternative Quick Start (Legacy)
 
 ```sh
 make setup
@@ -8,6 +140,7 @@ make up
 make test
 # (Optional) Run frontend tests:
 make frontend-test
+```
 ```
 
 > **Tip:** `make up` uses Docker Compose to start backend, worker (Celery), Redis, Postgres, and MinIO. No need to start Redis or the Celery worker manually for normal development.

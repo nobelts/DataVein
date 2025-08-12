@@ -1,4 +1,4 @@
-#!/Users/nobeltsegai/Documents/Seo-dev/datavein/root/.venv/bin/python3.11
+#!/Users/nobeltsegai/Documents/Seo-dev/datavein-work/root/.venv/bin/python3.11
 # -*- coding: utf-8 -*-
 import re
 import sys

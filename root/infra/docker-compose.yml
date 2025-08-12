@@ -8,7 +8,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DB_URL=postgresql://user:password@postgres/dbname
+      - DATABASE_URL=postgresql+asyncpg://user:password@postgres:5432/dbname
       - JWT_SECRET=your_jwt_secret
     depends_on:
       - postgres
