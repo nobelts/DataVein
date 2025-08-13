@@ -9,9 +9,6 @@
 
 ### 1. Environment Setup
 ```bash
-# Clone and navigate
-git clone <repository-url>
-cd datavein-work
 
 # Copy environment template
 cp .env.example .env
