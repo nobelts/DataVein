@@ -10,8 +10,12 @@ services:
     environment:
       - DATABASE_URL=postgresql+asyncpg://user:password@postgres:5432/dbname
       - JWT_SECRET=your_jwt_secret
+      - S3_ENDPOINT_URL=http://minio:9000
+      - AWS_ACCESS_KEY_ID=minio
+      - AWS_SECRET_ACCESS_KEY=minio123
     depends_on:
       - postgres
+      - minio
 
   worker:
     build:

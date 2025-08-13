@@ -1,0 +1,7 @@
+[
+  {"customer_id": 1, "name": "John Doe", "email": "john@example.com", "age": 28, "city": "New York"},
+  {"customer_id": 2, "name": "Jane Smith", "email": "jane@example.com", "age": 34, "city": "Los Angeles"},
+  {"customer_id": 3, "name": "Mike Johnson", "email": "mike@example.com", "age": 42, "city": "Chicago"},
+  {"customer_id": 4, "name": "Sarah Wilson", "email": "sarah@example.com", "age": 29, "city": "Houston"},
+  {"customer_id": 5, "name": "David Brown", "email": "david@example.com", "age": 38, "city": "Phoenix"}
+]

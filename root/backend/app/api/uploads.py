@@ -9,7 +9,6 @@ from app.models import User, Upload, FilePart
 from app.schemas import (
     UploadInitRequest, 
     UploadInitResponse, 
-    UploadCompleteRequest,
     UploadStatus
 )
 from app.auth import get_current_user
@@ -42,8 +41,8 @@ async def initiate_upload(
     await db.refresh(new_upload)
     
     try:
-        # Generate presigned URLs
-        s3_key, presigned_urls = await s3_service.generate_presigned_upload_urls(
+        # Generate single presigned URL for simple upload
+        s3_key, presigned_url = await s3_service.generate_presigned_upload_url(
             user_id=current_user.id,
             upload_id=new_upload.upload_id,
             filename=upload_request.filename,
@@ -55,7 +54,7 @@ async def initiate_upload(
         
         return UploadInitResponse(
             upload_id=new_upload.upload_id,
-            upload_urls=presigned_urls,
+            presigned_url=presigned_url,
             s3_key=s3_key
         )
         
@@ -65,21 +64,58 @@ async def initiate_upload(
         raise HTTPException(status_code=500, detail=f"Failed to initiate upload: {str(e)}")
 
 
-@router.post("/complete")
+@router.post("/{upload_id}/complete")
 @limiter.limit("20/minute")  # Limit completion requests
 async def complete_upload(
     request: Request,
-    complete_request: UploadCompleteRequest,
+    upload_id: uuid.UUID,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_database)
 ):
     """
-    Complete a file upload and validate all parts.
+    Complete a single file upload.
     """
     # Get upload record and verify ownership
     result = await db.execute(
         select(Upload).where(
-            Upload.upload_id == complete_request.upload_id,
+            Upload.upload_id == upload_id,
+            Upload.user_id == current_user.id
+        )
+    )
+    upload = result.scalar_one_or_none()
+    
+    if not upload:
+        raise HTTPException(status_code=404, detail="Upload not found")
+    
+    if upload.status != "UPLOADING":
+        raise HTTPException(status_code=400, detail=f"Upload is in {upload.status} status")
+    
+    # Update upload status
+    upload.status = "COMPLETED"
+    await db.commit()
+    
+    return {
+        "message": "Upload completed successfully",
+        "upload_id": str(upload.upload_id),
+        "filename": upload.filename
+    }
+
+
+@router.post("/{upload_id}/complete")
+@limiter.limit("20/minute")  # Limit completion requests
+async def complete_upload_simple(
+    request: Request,
+    upload_id: uuid.UUID,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_database)
+):
+    """
+    Simple upload completion endpoint for single-part uploads.
+    """
+    # Get upload record and verify ownership
+    result = await db.execute(
+        select(Upload).where(
+            Upload.upload_id == upload_id,
             Upload.user_id == current_user.id
         )
     )

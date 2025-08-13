@@ -77,22 +77,22 @@ const Dashboard = () => {
           <h2 className="text-lg font-medium text-gray-900 mb-4">Quick Actions</h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <Link
-              to="/upload"
-              className="relative group bg-white p-6 border border-gray-300 rounded-lg hover:border-indigo-500 hover:shadow-md transition-all"
+              to="/augmentation"
+              className="relative group bg-white p-6 border border-gray-300 rounded-lg hover:border-green-500 hover:shadow-md transition-all"
             >
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <div className="flex items-center justify-center h-10 w-10 rounded-md bg-indigo-500 text-white">
+                  <div className="flex items-center justify-center h-10 w-10 rounded-md bg-green-500 text-white">
                     <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                     </svg>
                   </div>
                 </div>
                 <div className="ml-4">
-                  <h3 className="text-lg font-medium text-gray-900 group-hover:text-indigo-600">
-                    Upload Files
+                  <h3 className="text-lg font-medium text-gray-900 group-hover:text-green-600">
+                    Data Augmentation
                   </h3>
-                  <p className="text-sm text-gray-500">Upload new data files for processing</p>
+                  <p className="text-sm text-gray-500">Generate synthetic data using AI methods</p>
                 </div>
               </div>
             </Link>
@@ -206,6 +206,26 @@ const Dashboard = () => {
                         <div className="ml-4">
                           <p className="text-sm font-medium text-gray-900">Pipeline {pipeline.id.slice(0, 8)}</p>
                           <p className="text-sm text-gray-500">Data processing pipeline</p>
+                          {pipeline.status === 'running' && (
+                            <div className="mt-2">
+                              <div className="flex items-center text-xs text-blue-600">
+                                <span>Processing...</span>
+                              </div>
+                              <div className="w-full bg-gray-200 rounded-full h-1.5 mt-1">
+                                <div className="bg-blue-600 h-1.5 rounded-full animate-pulse" style={{width: '60%'}}></div>
+                              </div>
+                            </div>
+                          )}
+                          {pipeline.status === 'completed' && (
+                            <div className="mt-1 text-xs text-green-600">
+                              ✓ Pipeline completed successfully
+                            </div>
+                          )}
+                          {pipeline.status === 'failed' && (
+                            <div className="mt-1 text-xs text-red-600">
+                              ✗ Pipeline failed
+                            </div>
+                          )}
                         </div>
                       </div>
                       <div className="flex items-center">

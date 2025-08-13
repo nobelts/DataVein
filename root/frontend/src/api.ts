@@ -15,7 +15,6 @@ export interface LoginRequest {
 export interface RegisterRequest {
   email: string;
   password: string;
-  full_name: string;
 }
 
 export interface TokenResponse {
@@ -32,6 +31,7 @@ export interface UploadInitRequest {
 export interface UploadInitResponse {
   upload_id: string;
   presigned_url: string;
+  s3_key: string;
 }
 
 export interface UploadResponse {
@@ -119,7 +119,7 @@ class ApiClient {
 
   // File uploads
   async initUpload(request: UploadInitRequest): Promise<UploadInitResponse> {
-    return this.request<UploadInitResponse>('/uploads/presigned-url', {
+    return this.request<UploadInitResponse>('/uploads/init', {
       method: 'POST',
       body: JSON.stringify(request),
     });

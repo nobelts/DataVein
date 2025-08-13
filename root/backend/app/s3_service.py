@@ -2,7 +2,6 @@ import boto3
 import os
 import uuid
 from typing import List, Tuple
-from app.schemas import PresignedUrlPart
 
 
 class S3Service:
@@ -18,25 +17,23 @@ class S3Service:
     def generate_s3_key(self, user_id: uuid.UUID, upload_id: uuid.UUID, filename: str) -> str:
         return f"users/{user_id}/uploads/{upload_id}/{filename}"
     
-    async def generate_presigned_upload_urls(
+    async def generate_presigned_upload_url(
         self, 
         user_id: uuid.UUID, 
         upload_id: uuid.UUID, 
         filename: str, 
         file_size: int
-    ) -> Tuple[str, List[PresignedUrlPart]]:
+    ) -> Tuple[str, str]:
         s3_key = self.generate_s3_key(user_id, upload_id, filename)
         
         # Single part upload for all files up to 500MB
-        # This avoids multipart upload complexity while supporting larger files
-        url = self.s3_client.generate_presigned_url(
+        presigned_url = self.s3_client.generate_presigned_url(
             'put_object',
             Params={'Bucket': self.bucket_name, 'Key': s3_key},
             ExpiresIn=3600  # 1 hour expiration
         )
         
-        presigned_urls = [PresignedUrlPart(part_number=1, upload_url=url)]
-        return s3_key, presigned_urls
+        return s3_key, presigned_url
 
 
 # Global instance

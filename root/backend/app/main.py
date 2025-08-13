@@ -10,6 +10,7 @@ from app.api.health import router as health_router
 from app.api.auth import router as auth_router
 from app.api.uploads import router as uploads_router
 from app.api.pipeline import router as pipeline_router
+from app.api.augmentation import router as augmentation_router
 from app.logging_middleware import LoggingMiddleware, get_request_id
 from app.rate_limiter import setup_rate_limiting
 from app.database import init_db
@@ -30,7 +31,7 @@ setup_rate_limiting(app)
 # Add CORS for frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:5173"],
+    allow_origins=["http://localhost:3000", "http://localhost:3001", "http://localhost:3002", "http://localhost:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -44,6 +45,7 @@ app.include_router(health_router)
 app.include_router(auth_router)
 app.include_router(uploads_router)
 app.include_router(pipeline_router)
+app.include_router(augmentation_router)
 
 
 @app.on_event("startup")

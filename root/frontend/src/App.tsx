@@ -4,8 +4,8 @@ import Home from './components/Home';
 import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
-import FileUpload from './components/FileUpload';
 import PipelineManager from './components/PipelineManager';
+import DataAugmentation from './components/DataAugmentation';
 import HealthCheck from './components/HealthCheck';
 
 // Protected Route component
@@ -23,7 +23,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return isAuthenticated ? <>{children}</> : <Navigate to="/login" />;
 };
 
-// Public Route component (redirect to dashboard if already authenticated)
+// Public Route component (redirect to dashboard/augmentation if already authenticated)
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, isLoading } = useAuth();
   
@@ -60,17 +60,17 @@ function App() {
             {/* Protected routes */}
             <Route path="/dashboard" element={
               <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            } />
-            <Route path="/upload" element={
-              <ProtectedRoute>
-                <FileUpload />
+                <DataAugmentation />
               </ProtectedRoute>
             } />
             <Route path="/pipelines" element={
               <ProtectedRoute>
                 <PipelineManager />
+              </ProtectedRoute>
+            } />
+            <Route path="/augmentation" element={
+              <ProtectedRoute>
+                <DataAugmentation />
               </ProtectedRoute>
             } />
             

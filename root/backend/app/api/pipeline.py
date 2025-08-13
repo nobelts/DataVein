@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
 from typing import List
 from datetime import datetime
 
@@ -15,7 +16,7 @@ router = APIRouter(prefix="/pipeline", tags=["pipeline"])
 @router.post("/start", response_model=PipelineStatus)
 async def start_pipeline(
     pipeline_data: PipelineCreateRequest,
-    db: Session = Depends(get_database),
+    db: AsyncSession = Depends(get_database),
     current_user: User = Depends(get_current_user)
 ):
     """
@@ -81,7 +82,7 @@ async def start_pipeline(
 @router.get("/{pipeline_id}", response_model=PipelineStatus)
 async def get_pipeline(
     pipeline_id: int,
-    db: Session = Depends(get_database),
+    db: AsyncSession = Depends(get_database),
     current_user: User = Depends(get_current_user)
 ):
     """
@@ -114,7 +115,7 @@ async def get_pipeline(
 @router.get("/{pipeline_id}/events", response_model=List[PipelineEvent])
 async def get_pipeline_events(
     pipeline_id: int,
-    db: Session = Depends(get_database),
+    db: AsyncSession = Depends(get_database),
     current_user: User = Depends(get_current_user)
 ):
     """
@@ -151,19 +152,22 @@ async def get_pipeline_events(
 
 @router.get("/", response_model=List[PipelineStatus])
 async def list_pipelines(
-    db: Session = Depends(get_database),
+    db: AsyncSession = Depends(get_database),
     current_user: User = Depends(get_current_user)
 ):
     """
     List all pipelines for the current user.
     """
-    pipelines = db.query(Pipeline).filter(
-        Pipeline.user_id == current_user.id
-    ).order_by(Pipeline.created_at.desc()).all()
+    result = await db.execute(
+        select(Pipeline).where(
+            Pipeline.user_id == current_user.id
+        ).order_by(Pipeline.created_at.desc())
+    )
+    pipelines = result.scalars().all()
     
     return [
         PipelineStatus(
-            id=pipeline.id,
+            id=pipeline.pipeline_id,
             upload_id=pipeline.upload_id,
             status=pipeline.status,
             config=pipeline.config,

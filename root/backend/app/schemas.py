@@ -32,7 +32,7 @@ class UserProfile(BaseModel):
     created_at: datetime
     
     class Config:
-        from_attributes = True
+        orm_mode = True
 
 
 # Upload schemas
@@ -42,38 +42,23 @@ class UploadInitRequest(BaseModel):
     
     @validator('file_size')
     def validate_file_size(cls, v):
-        max_size = 500 * 1024 * 1024  # 500MB
+        max_size = 100 * 1024 * 1024  # 100MB
         if v > max_size:
-            raise ValueError(f'File size must not exceed 500MB')
+            raise ValueError(f'File size must not exceed 100MB')
         return v
     
     @validator('filename')
     def validate_filename(cls, v):
-        allowed_extensions = ['.csv', '.json', '.ndjson']
+        allowed_extensions = ['.csv', '.json', '.ndjson', '.txt', '.tsv', '.xlsx', '.xls', '.parquet', '.xml', '.yaml', '.yml']
         if not any(v.lower().endswith(ext) for ext in allowed_extensions):
-            raise ValueError(f'File must be CSV, JSON, or NDJSON')
+            raise ValueError(f'File must be a supported data format (CSV, JSON, TXT, TSV, Excel, Parquet, XML, YAML)')
         return v
-
-
-class PresignedUrlPart(BaseModel):
-    part_number: int
-    upload_url: str
 
 
 class UploadInitResponse(BaseModel):
     upload_id: uuid.UUID
-    upload_urls: List[PresignedUrlPart]
+    presigned_url: str
     s3_key: str
-
-
-class UploadPartComplete(BaseModel):
-    part_number: int
-    etag: str
-
-
-class UploadCompleteRequest(BaseModel):
-    upload_id: uuid.UUID
-    parts: List[UploadPartComplete]
 
 
 class UploadStatus(BaseModel):

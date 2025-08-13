@@ -6,7 +6,6 @@ interface RegisterForm {
   email: string;
   password: string;
   confirmPassword: string;
-  full_name: string;
 }
 
 const Register = () => {
@@ -14,7 +13,6 @@ const Register = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    full_name: '',
   });
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState(false);
@@ -30,8 +28,8 @@ const Register = () => {
       return;
     }
 
-    if (form.password.length < 6) {
-      setError('Password must be at least 6 characters');
+    if (form.password.length < 8) {
+      setError('Password must be at least 8 characters');
       return;
     }
 
@@ -41,7 +39,6 @@ const Register = () => {
       await register({
         email: form.email,
         password: form.password,
-        full_name: form.full_name,
       });
       navigate('/dashboard');
     } catch (error: any) {
@@ -81,22 +78,6 @@ const Register = () => {
           
           <div className="space-y-4">
             <div>
-              <label htmlFor="full_name" className="block text-sm font-medium text-gray-700">
-                Full Name
-              </label>
-              <input
-                id="full_name"
-                name="full_name"
-                type="text"
-                required
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="John Doe"
-                value={form.full_name}
-                onChange={handleChange}
-              />
-            </div>
-            
-            <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 Email Address
               </label>
@@ -124,7 +105,7 @@ const Register = () => {
                 autoComplete="new-password"
                 required
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="At least 6 characters"
+                placeholder="At least 8 characters"
                 value={form.password}
                 onChange={handleChange}
               />
