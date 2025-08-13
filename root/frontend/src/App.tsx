@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './useAuth';
+import Header from './components/Header';
 import Home from './components/Home';
 import Login from './components/Login';
 import Register from './components/Register';
@@ -43,6 +44,7 @@ function App() {
     <AuthProvider>
       <Router>
         <div className="App">
+          <Header />
           <Routes>
             {/* Public routes */}
             <Route path="/" element={<Home />} />

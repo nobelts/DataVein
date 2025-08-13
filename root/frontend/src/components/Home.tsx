@@ -1,17 +1,34 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../useAuth';
 
 const Home: React.FC = () => {
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogoClick = () => {
+    // If not logged in, go to home page
+    // If logged in, stay on current page (do nothing)
+    if (!isAuthenticated) {
+      navigate('/');
+    }
+  };
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-500">
       {/* Navigation */}
       <nav className="backdrop-blur-sm bg-white/60 border-b border-white/20">
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                DataVein
-              </span>
+            <div 
+              onClick={handleLogoClick}
+              className={`flex items-center ${!isAuthenticated ? 'cursor-pointer hover:opacity-80' : 'cursor-default'} transition-opacity`}
+            >
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-lg">D</span>
+                </div>
+                <span className="text-xl font-bold text-gray-900">DataVein</span>
+              </div>
             </div>
             <div className="flex items-center space-x-4">
               <Link
@@ -35,11 +52,10 @@ const Home: React.FC = () => {
       <section className="py-16">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 bg-clip-text text-transparent mb-4">
-            Transform Your Data Into Insights
+            Seamlessly transform your data
           </h1>
           <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-            Upload your data files and get intelligent processing results instantly. 
-            Simple, fast, and powerful data analytics for everyone.
+            Upload your files and instantly augment your data. Generate larger training datasets in multiple formats with ease, and boost your workflow in just a few clicks
           </p>
           <div className="flex justify-center">
             <Link

@@ -1,5 +1,7 @@
 import React, { useState, useCallback, useRef } from 'react';
-import { Upload, Download, Settings, BarChart3, Clock, CheckCircle, AlertCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Upload, Download, Settings, BarChart3, Clock, CheckCircle, AlertCircle, LogOut } from 'lucide-react';
+import { useAuth } from '../useAuth';
 
 interface AugmentationMethod {
   id: string;
@@ -28,6 +30,8 @@ interface ResultInfo {
 }
 
 const DataAugmentation: React.FC = () => {
+  const { logout, user } = useAuth();
+  const navigate = useNavigate();
   const [taskId, setTaskId] = useState<string | null>(null);
   const [taskInfo, setTaskInfo] = useState<TaskInfo | null>(null);
   const [selectedMethod, setSelectedMethod] = useState<string>('noise_injection');
@@ -39,7 +43,7 @@ const DataAugmentation: React.FC = () => {
   const [isAugmenting, setIsAugmenting] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const progressIntervalRef = useRef<number | null>(null);
 
   const methods: AugmentationMethod[] = [
     {
@@ -229,11 +233,29 @@ const DataAugmentation: React.FC = () => {
     }
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Data Augmentation</h1>
-        <p className="text-gray-600">Generate synthetic data using statistical methods</p>
+      {/* Header with logout */}
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Data Augmentation</h1>
+          <p className="text-gray-600">Generate synthetic data using statistical methods</p>
+        </div>
+        <div className="flex items-center space-x-4">
+          <span className="text-gray-600">Welcome, {user?.email}</span>
+          <button
+            onClick={handleLogout}
+            className="flex items-center bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+          >
+            <LogOut className="w-4 h-4 mr-2" />
+            Logout
+          </button>
+        </div>
       </div>
 
       {/* Step 1: File Upload */}
@@ -250,7 +272,7 @@ const DataAugmentation: React.FC = () => {
               type="file"
               accept=".csv,.tsv,.txt,.json,.xlsx,.xls,.parquet"
               onChange={handleFileUpload}
-              className="hidden"
+              style={{ display: 'none' }}
             />
             <button
               onClick={() => fileInputRef.current?.click()}
