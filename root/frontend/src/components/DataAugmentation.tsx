@@ -235,26 +235,29 @@ const DataAugmentation: React.FC = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/');
+    // Small delay to ensure logout completes before navigation
+    setTimeout(() => {
+      navigate('/');
+    }, 100);
   };
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
       {/* Header with logout */}
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-start mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Data Augmentation</h1>
-          <p className="text-gray-600">Generate synthetic data using statistical methods</p>
+          <h1 className="text-3xl font-bold text-gray-900">Data Augment</h1>
+          <p className="text-gray-600">Select a file, pick your method, and expand your dataset</p>
         </div>
-        <div className="flex items-center space-x-4">
-          <span className="text-gray-600">Welcome, {user?.email}</span>
+        <div className="flex flex-col items-end space-y-2">
           <button
             onClick={handleLogout}
-            className="flex items-center bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+            className="flex items-center bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors"
           >
             <LogOut className="w-4 h-4 mr-2" />
             Logout
           </button>
+          <span className="text-gray-600 text-sm">Welcome, {user?.email}</span>
         </div>
       </div>
 
@@ -467,7 +470,7 @@ const DataAugmentation: React.FC = () => {
             <button
               onClick={() => downloadData('csv')}
               disabled={isDownloading}
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center"
+              className="bg-blue-800 text-white px-6 py-3 rounded-lg hover:bg-blue-900 disabled:opacity-50 flex items-center"
             >
               <Download className="w-4 h-4 mr-2" />
               Download CSV
@@ -475,7 +478,7 @@ const DataAugmentation: React.FC = () => {
             <button
               onClick={() => downloadData('parquet')}
               disabled={isDownloading}
-              className="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 disabled:opacity-50 flex items-center"
+              className="bg-blue-800 text-white px-6 py-3 rounded-lg hover:bg-blue-900 disabled:opacity-50 flex items-center"
             >
               <Download className="w-4 h-4 mr-2" />
               Download Parquet

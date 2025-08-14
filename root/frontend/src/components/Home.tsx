@@ -39,7 +39,7 @@ const Home: React.FC = () => {
               </Link>
               <Link
                 to="/register"
-                className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-blue-700 hover:to-indigo-700 transition-all"
+                className="bg-black text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800 transition-all"
               >
                 Get Started
               </Link>
@@ -51,16 +51,16 @@ const Home: React.FC = () => {
       {/* Hero Section */}
       <section className="py-16">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 bg-clip-text text-transparent mb-4">
-            Seamlessly transform your data
+          <h1 className="text-4xl font-bold text-black mb-4 drop-shadow-sm">
+            Seamlessly Transform Your Data
           </h1>
-          <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+          <p className="text-lg text-black mb-8 max-w-2xl mx-auto drop-shadow-sm">
             Upload your files and instantly augment your data. Generate larger training datasets in multiple formats with ease, and boost your workflow in just a few clicks
           </p>
           <div className="flex justify-center">
             <Link
               to="/register"
-              className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-3 rounded-xl font-semibold hover:shadow-lg transition-all duration-200 backdrop-blur-sm"
+              className="backdrop-blur-sm bg-white/40 text-gray-900 px-8 py-3 rounded-xl font-semibold hover:bg-white/50 transition-all duration-200 border border-white/20"
             >
               Start Processing Data
             </Link>
@@ -89,7 +89,7 @@ const Home: React.FC = () => {
                 </svg>
               </div>
               <h3 className="text-sm font-semibold text-gray-900 mb-1">Process</h3>
-              <p className="text-xs text-gray-600">AI-powered analysis in real-time</p>
+              <p className="text-xs text-gray-600">Secure data processing and transformation</p>
             </div>
 
             <div className="backdrop-blur-sm bg-white/40 rounded-lg p-4 text-center">
@@ -98,8 +98,8 @@ const Home: React.FC = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
               </div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-1">Insights</h3>
-              <p className="text-xs text-gray-600">Get actionable results instantly</p>
+              <h3 className="text-sm font-semibold text-gray-900 mb-1">Augment</h3>
+              <p className="text-xs text-gray-600">Get augmented data with your customization</p>
             </div>
           </div>
         </div>
@@ -108,9 +108,12 @@ const Home: React.FC = () => {
       {/* Simple About Section */}
       <section className="py-8 text-center">
         <div className="max-w-3xl mx-auto px-6">
-          <p className="text-gray-600 text-sm leading-relaxed">
-            DataVein is built for teams who need reliable data processing without complexity. 
-            <span className="font-medium"> Upload → Process → Insights</span> - it's that simple.
+          <p className="text-black text-sm leading-relaxed drop-shadow-sm">
+            DataVein is built for users who need reliable data augmentation without complexity. Making it effortless to expand and enhance datasets.
+            Whether you're working with production data, conducting research, or preparing for a student hackathon demo, augmentation is fast and stress free.
+          </p>
+          <p className="text-black text-sm font-medium mt-2 drop-shadow-sm">
+            <span className="font-medium">Upload → Process → Augment</span> - it's that simple.
           </p>
         </div>
       </section>
